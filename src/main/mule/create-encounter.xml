@@ -11,8 +11,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/java
 ---
-{
-}]]></ee:set-payload>
+payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<wsc:consume doc:name="Consume" doc:id="495d05d3-e1f8-431b-8245-c399ab8a5576" operation="createEncounter" config-ref="Web_Service_Consumer_Config"/>
