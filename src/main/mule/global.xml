@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	
+	<http:listener-config name="httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+	<global-property doc:name="Global Property" doc:id="2b56456b-a581-45dd-8f6d-f2f47ee4119d" name="mule.env" value="local" />
+	<configuration-properties doc:name="Configuration properties" doc:id="60fd49a7-07cb-4ba6-b149-d03a37318e74" file="config/${mule.env}.yaml" />
+	<api-gateway:autodiscovery apiId="${api.id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="8906a28f-355d-4c18-92ce-147e9d51531f" flowRef="ehr-system-api-main" />
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="a9ca04fd-efce-4f57-8303-52558dd5045d" >
+		<wsc:connection wsdlLocation="https://steel-city-memorial.ehr.secondssave.com/soap/facilityEhr?wsdl" service="FacilityEhrService" port="FacilityEhrServicePort" address="https://steel-city-memorial.ehr.secondssave.com/soap/facilityEhr"/>
+	</wsc:config>
+	
+	
+	
+</mule>

@@ -1,0 +1,64 @@
+name: mulesoft build
+
+on:
+  push: 
+    branches: [master]
+
+jobs: 
+  build: 
+    name: build application 
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out the code 
+        uses: actions/checkout@v4
+      - name: setup JDK 17
+        uses: actions/setup-java@v4
+        with: 
+          java-version: "17"
+          distribution: zulu
+          cache: maven
+          
+      - name: package with maven
+        run: mvn clean package --settings .github/settings.xml
+        env: 
+          CONNECTED_APP_CLIENT_ID: ${{ vars.CONNECTED_APP_CLIENT_ID}}
+          CONNECTED_APP_CLIENT_SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
+          
+      - name: Publish to exchange
+        run: mvn deploy --settings .github/settings.xml
+        env: 
+          CONNECTED_APP_CLIENT_ID: ${{ vars.CONNECTED_APP_CLIENT_ID}}
+          CONNECTED_APP_CLIENT_SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
+      - name: Upload  build artifacts 
+        uses: actions/upload-artifact@v4  
+        with:
+          name: mule-application
+          path: target/*.jar
+          if-no-files-found: error     
+          retention-days: 10
+  deploy:
+    name: Deploy to CloudHub 2.0
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: check out the code 
+        uses: actions/checkout@v4
+      - name: setup JDK 17
+        uses: actions/setup-java@v4
+        with: 
+          java-version: "17"
+          distribution: zulu
+          cache: maven 
+      - name: Deploy to CloudHub 2.0
+        run: |      
+          mvn clean deploy -DmuleDeploy \
+            -DconnectedApp.clientId= ${{ vars.CONNECTED_APP_CLIENT_ID }} \
+            -DconnectedApp.clientSecret= ${{ secrets.CONNECTED_APP_CLIENT_SECCRET}} \
+            -Danypoint.platform.client_id= ${{ vars.API_MGR_CLIENT_ID }} \
+            -Danypoint.platform.client_secret= ${{ secrets.API_MGR_CLENT_SECRET }}            
+        env: 
+          CONNECTED_APP_CLIENT_ID: ${{ vars.CONNECTED_APP_CLIENT_ID}}
+          CONNECTED_APP_CLIENT_SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
+
+    
+    
