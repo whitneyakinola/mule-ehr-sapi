@@ -51,7 +51,7 @@ jobs:
           cache: maven 
       - name: Deploy to CloudHub 2.0
         run: |      
-          mvn clean deploy -DmuleDeploy -X \
+          mvn clean deploy -DmuleDeploy \
             -DconnectedApp.clientId= ${{ vars.CONNECTED_APP_CLIENT_ID }} \
             -DconnectedApp.clientSecret= ${{ secrets.CONNECTED_APP_CLIENT_SECCRET}} \
             -Danypoint.platform.client_id= ${{ vars.API_MGR_CLIENT_ID }} \

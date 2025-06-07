@@ -4,7 +4,7 @@
 
 	<groupId>7e373f5e-741c-41be-813e-ede4644f9594</groupId>
 	<artifactId>ehr-sapi-impl</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>mule-application</packaging>
 
 	<name>ehr-sapi</name>
