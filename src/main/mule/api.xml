@@ -131,6 +131,6 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="post:\encounters:application\json:ehr-system-api-config">
-        <logger level="INFO" message="post:\encounters:application\json:ehr-system-api-config" />
+		<flow-ref doc:name="createEncounter Flow" doc:id="2d93698c-178c-42ac-94a7-48ee4bb31437" name="create-encounterFlow"/>
     </flow>
 </mule>
