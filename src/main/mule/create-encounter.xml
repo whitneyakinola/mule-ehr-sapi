@@ -9,18 +9,63 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<ee:transform doc:name="create SOAP request" doc:id="87c1b23e-20a8-44f1-a6b9-c8155b2fbb80" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/xml
+ns soap http://ehr.secondssave.com/soap
+
+fun toEhrList(items: Array<String>): String = if (isEmpty(items)) "None known"
+	else items joinBy ", "
+
+var patient = payload.patient
+var vitals = payload.vitals
+var allergies: String = toEhrList(patient.allergies)
+var medications: String = toEhrList(patient.medications)
 ---
-payload]]></ee:set-payload>
+{
+	soap#createEncounterRequest: {
+		emergencyResponseId: payload.emergencyResponseId,
+		patientData: {
+			firstName: patient.firstName,
+			lastName: patient.lastName,
+			dateOfBirth: patient.dateOfBirth,
+			gender: patient.gender,
+			medicalHistory: patient.medicalHistory,
+			allergies: allergies,
+			medications: medications,
+		},
+		vitalSigns: {
+			heartRate: vitals.heartRate,
+			bloodPressureSystolic: vitals.bloodPressure.systolic,
+			bloodPressureDiastolic: vitals.bloodPressure.diastolic,
+			bloodOxygen: vitals.bloodOxygen,
+			temperature: vitals.temperature,
+			respiratoryRate: vitals.respiratoryRate
+		},
+		chiefComplaint: payload.chiefComplaint,
+		estimatedArrival: payload.estimatedArrival,
+		triagePriority: payload.triagePriority,
+		vehicleIdentifier: payload.vehicle.id,
+		transportMode: payload.vehicle."type",
+		paramedicNotes: payload.paramedicNotes
+	}
+}
+]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<wsc:consume doc:name="Consume" doc:id="495d05d3-e1f8-431b-8245-c399ab8a5576" operation="createEncounter" config-ref="Web_Service_Consumer_Config"/>
+		<wsc:consume doc:name="createEncounter" doc:id="495d05d3-e1f8-431b-8245-c399ab8a5576" operation="createEncounter" config-ref="Web_Service_Consumer_Config"/>
+		<logger level="INFO" doc:name="INFO" doc:id="555eda2d-97e1-4fd2-9571-91ce99b421e4" message="#[payload]"/>
 		<ee:transform doc:name="create JSON response" doc:id="b26134e8-0e2b-494a-b6b4-657f9e4232b3" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
+ns ns2 http://ehr.secondssave.com/soap
+var response = payload.body.ns2#createEncounterResponse
+var actions = log(response.*recommendedActions)
 ---
 {
+    encounterId: response.encounterId as Number,
+    patientId: response.patientId as Number,
+    status: response.status,
+    recommendedActions: actions
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
