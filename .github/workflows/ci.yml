@@ -54,11 +54,13 @@ jobs:
           mvn clean deploy -DmuleDeploy\
             -DconnectedApp.clientId=${{ vars.CONNECTED_APP_CLIENT_ID }}\
             -DconnectedApp.clientSecret=${{ secrets.CONNECTED_APP_CLIENT_SECRET }}\
-            -Danypoint.platform.client_id=${{ vars.API_MGR_CLIENT_ID }} \
-            -Danypoint.platform.client_secret=${{ secrets.API_MGR_CLENT_SECRET }}            
+            -Danypoint.platform.client_id=${{ vars.API_MGR_CLIENT_ID }}\
+            -Danypoint.platform.client_secret=${{ secrets.API_MGR_CLENT_SECRET }}\
+            -Dehr.password=${{ secrets.EHR_PASSWORD }}            
         env: 
           CONNECTED_APP_CLIENT_ID: ${{ vars.CONNECTED_APP_CLIENT_ID}}
           CONNECTED_APP_CLIENT_SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
+          EHR_PASSWORD: ${{ secrets.EHR_PASSWORD }} 
 
     
     
