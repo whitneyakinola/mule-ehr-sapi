@@ -9,5 +9,8 @@
     "bloodOxygen": 94.2,
     "temperature": 38.1,
     "respiratoryRate": 24
+  },
+  "device": {
+  	"id": 31
   }
 }

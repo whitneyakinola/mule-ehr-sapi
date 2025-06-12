@@ -1,5 +1,8 @@
 {
   "sampleData": {
+    "305f3cd2-3f73-457a-b906-a317d5f0ba89": {
+      "payload": "sample_data/java.dwl"
+    },
     "d45910ab-1fc8-4c56-b5c6-e5f812d59d32": {
       "vars-encounterId": "sample_data/defaultstringtype.dwl",
       "payload": "sample_data/json.json"

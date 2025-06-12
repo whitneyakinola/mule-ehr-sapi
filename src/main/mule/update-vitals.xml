@@ -14,7 +14,17 @@ ns ns2 http://ehr.secondssave.com/soap
 ---
 {
 	ns2#updatePatientVitalsRequest: {
-		encounterId: vars.encounterId
+		encounterId: vars.encounterId,
+		vitalSigns: {
+			heartRate: payload.vitals.heartRate,
+			bloodPressureSystolic: payload.vitals.bloodPressure.systolic,
+			bloodPressureDiastolic: payload.vitals.bloodPressure.diastolic,
+			bloodOxygen:payload.vitals.bloodOxygen,
+			temperature: payload.vitals.temperature,
+			respiratoryRate: payload.vitals.respitoryRate
+		},
+		(deviceId: payload.device.id) if payload.device.id?,
+		recordedAt: now()
 	}
 }]]></ee:set-payload>
 			</ee:message>
@@ -23,10 +33,12 @@ ns ns2 http://ehr.secondssave.com/soap
 		<logger level="DEBUG" doc:name="DEBUG" doc:id="4cd917d9-3bd8-4cb2-83fd-9d784bd530ab" message="#[payload]" />
 		<ee:transform doc:name="create JSON response" doc:id="305f3cd2-3f73-457a-b906-a317d5f0ba89" >
 			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+				<ee:set-payload ><![CDATA[%dw 2.0output application/jsonns ns2 http://ehr.secondssave.com/soap
+var response = payload.body.ns2#updatePatientVitalsResponsevar summaries = response.*vitalSignsSummaryvar vitalSigns = summaries map (summary) -> 	{		id: summary.vitalSignsId as Number, 		source: summary.source,		recorded: summary.recordedAt,		(device: {			id: summary.deviceId as Number		}) if summary.source == "device",		vitals: do { //do keyword defines local scope			var vitals = summary.vitalSigns 			---			{ //object Constructor				heartRate: vitals.heartRate,					bloodPressure: {					systolic: vitals.bloodPressureSystolic as Number,					diastolic: vitals.bloodPressureDiastolic as Number,				},				bloodOxygen: vitals.bloodOxygen as Number,				temperature: vitals.temperature as Number,				respiratoryRate: vitals.respiratoryRate as Number				}		}					}
+
 ---
 {
+	id: response.vitalSignsId as Number,	vitalSigns: vitalSigns
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
