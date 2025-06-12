@@ -1,0 +1,22 @@
+%dw 2.0
+
+type auto_af39dd41_cee8_40af_8ae1_0540085fdd80_Input_Payload = {
+  device?: {
+    id: Number, 
+    _?: Any
+  }, 
+  vitals: {
+    bloodPressure: {
+      systolic: Number, 
+      diastolic: Number, 
+      _?: Any
+    }, 
+    bloodOxygen: Number, 
+    heartRate: Number, 
+    respiratoryRate: Number, 
+    temperature: Number, 
+    _?: Any
+  }, 
+  _?: Any
+}
+

@@ -1,0 +1,8 @@
+%dw 2.0
+
+type auto_af39dd41_cee8_40af_8ae1_0540085fdd80_Output_Payload = {
+  vitalSigns: Array<{    id: Number,     source: String,     recorded: String,     deviceId: Number,     vitals: {      bloodPressure: {        systolic: Number,         diastolic: Number,         _?: Any      },       bloodOxygen: Number,       heartRate: Number,       respiratoryRate: Number,       temperature: Number,       _?: Any    },     _?: Any  }>, 
+  id: Number, 
+  _?: Any
+}
+

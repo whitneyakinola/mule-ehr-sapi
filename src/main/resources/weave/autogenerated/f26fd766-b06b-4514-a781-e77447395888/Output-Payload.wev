@@ -1,0 +1,10 @@
+%dw 2.0
+
+type auto_f26fd766_b06b_4514_a781_e77447395888_Output_Payload = {
+  patientId: Number, 
+  encounterId: String, 
+  recommendations: Array<String>, 
+  status: String, 
+  _?: Any
+}
+

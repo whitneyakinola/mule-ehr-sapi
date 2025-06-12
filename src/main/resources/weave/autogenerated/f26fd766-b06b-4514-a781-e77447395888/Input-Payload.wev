@@ -1,0 +1,39 @@
+%dw 2.0
+
+type auto_f26fd766_b06b_4514_a781_e77447395888_Input_Payload = {
+  triagePriority: "P1_CRITICAL" | "P3_MEDIUM" | "P4_LOW" | "P2_HIGH" | "P5_NON_URGENT", 
+  paramedicNotes: String, 
+  patient: {
+    allergies: Array<String>, 
+    firstName?: String, 
+    lastName?: String, 
+    gender?: String, 
+    medications: Array<String>, 
+    dateOfBirth?: String, 
+    medicalHistory?: String, 
+    _?: Any
+  }, 
+  emergencyResponseId: Number, 
+  vehicles: {
+    id: Number, 
+    vehicleType: "helicopter" | "ambulance", 
+    _?: Any
+  }, 
+  estimatedArrival: String, 
+  chiefComplaint: String, 
+  vitals: {
+    bloodPressure: {
+      systolic: Number, 
+      diastolic: Number, 
+      _?: Any
+    }, 
+    bloodOxygen: Number, 
+    heartRate: Number, 
+    respiratoryRate: Number, 
+    temperature: Number, 
+    _?: Any
+  }, 
+  encounterType: "followup" | "routine" | "emergency" | "urgent", 
+  _?: Any
+}
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	<flow name="vital-signsFlow" doc:id="af39dd41-cee8-40af-8ae1-0540085fdd80" >
+		<ee:transform doc:name="create SOAP request" doc:id="d45910ab-1fc8-4c56-b5c6-e5f812d59d32">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+ns ns2 http://ehr.secondssave.com/soap
+---
+{
+	ns2#updatePatientVitalsRequest: {
+		encounterId: vars.encounterId
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume doc:name="Consume" doc:id="11a8eed0-dbd6-4dd0-ae42-811a0654fb41" config-ref="Web_Service_Consumer_Config" operation="updatePatientVitals"/>
+		<logger level="DEBUG" doc:name="DEBUG" doc:id="4cd917d9-3bd8-4cb2-83fd-9d784bd530ab" message="#[payload]" />
+		<ee:transform doc:name="create JSON response" doc:id="305f3cd2-3f73-457a-b906-a317d5f0ba89" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

@@ -11,10 +11,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/xml
 ns soap http://ehr.secondssave.com/soap
-
-fun toEhrList(items: Array<String>): String = if (isEmpty(items)) "None known"
+fun toEhrList(items: Array<String>): String = if ( isEmpty(items) ) "None known"
 	else items joinBy ", "
-
 var patient = payload.patient
 var vitals = payload.vitals
 var allergies: String = toEhrList(patient.allergies)
@@ -40,6 +38,7 @@ var medications: String = toEhrList(patient.medications)
 			temperature: vitals.temperature,
 			respiratoryRate: vitals.respiratoryRate
 		},
+		encounterType: payload.encounterType,
 		chiefComplaint: payload.chiefComplaint,
 		estimatedArrival: payload.estimatedArrival,
 		triagePriority: payload.triagePriority,

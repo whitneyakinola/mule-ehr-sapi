@@ -1,0 +1,8 @@
+{
+  "sampleData": {
+    "d45910ab-1fc8-4c56-b5c6-e5f812d59d32": {
+      "vars-encounterId": "sample_data/defaultstringtype.dwl",
+      "payload": "sample_data/json.json"
+    }
+  }
+}

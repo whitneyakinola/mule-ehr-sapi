@@ -48,7 +48,7 @@
 							<anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>
 							<ehr.password>${ehr.password}</ehr.password>
 						</properties>
-						<secureProperties></secureProperties>
+						<secureProperties/>
 					</cloudhub2Deployment>
 				</configuration>
 			</plugin>
@@ -75,20 +75,20 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>7e373f5e-741c-41be-813e-ede4644f9594</groupId>
-			<artifactId>ehr-system-api</artifactId>
-			<version>1.0.1</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
 			<groupId>org.mule.connectors</groupId>
 			<artifactId>mule-wsc-connector</artifactId>
 			<version>1.11.2</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
+		<dependency>
+			<groupId>7e373f5e-741c-41be-813e-ede4644f9594</groupId>
+			<artifactId>ehr-system-api</artifactId>
+			<version>1.1.1</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
+		</dependency>
 	</dependencies>
-<distributionManagement>
+	<distributionManagement>
 		<repository>
 			<id>Repository</id>
 			<name>Corporate Repository</name>

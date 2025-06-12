@@ -1,0 +1,13 @@
+{
+  "source": "manual",
+  "vitals": {
+    "heartRate": 110,
+    "bloodPressure": {
+      "systolic": 150,
+      "diastolic": 95
+    },
+    "bloodOxygen": 94.2,
+    "temperature": 38.1,
+    "respiratoryRate": 24
+  }
+}
