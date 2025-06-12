@@ -24,7 +24,7 @@ ns ns2 http://ehr.secondssave.com/soap
 			respiratoryRate: payload.vitals.respitoryRate
 		},
 		(deviceId: payload.device.id) if payload.device.id?,
-		recordedAt: now()
+		recordedAt: now() >> "UTC"
 	}
 }]]></ee:set-payload>
 			</ee:message>
@@ -34,7 +34,7 @@ ns ns2 http://ehr.secondssave.com/soap
 		<ee:transform doc:name="create JSON response" doc:id="305f3cd2-3f73-457a-b906-a317d5f0ba89" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0output application/jsonns ns2 http://ehr.secondssave.com/soap
-var response = payload.body.ns2#updatePatientVitalsResponsevar summaries = response.*vitalSignsSummaryvar vitalSigns = summaries map (summary) -> 	{		id: summary.vitalSignsId as Number, 		source: summary.source,		recorded: summary.recordedAt,		(device: {			id: summary.deviceId as Number		}) if summary.source == "device",		vitals: do { //do keyword defines local scope			var vitals = summary.vitalSigns 			---			{ //object Constructor				heartRate: vitals.heartRate,					bloodPressure: {					systolic: vitals.bloodPressureSystolic as Number,					diastolic: vitals.bloodPressureDiastolic as Number,				},				bloodOxygen: vitals.bloodOxygen as Number,				temperature: vitals.temperature as Number,				respiratoryRate: vitals.respiratoryRate as Number				}		}					}
+var response = payload.body.ns2#updatePatientVitalsResponsevar summaries = response.*vitalSignsSummaryfun transformVitals(summary) = do { //do keyword defines local scope			var vitals = summary.vitalSigns 			---			{ //object Constructor				heartRate: vitals.heartRate,					bloodPressure: {					systolic: vitals.bloodPressureSystolic as Number,					diastolic: vitals.bloodPressureDiastolic as Number,				},				bloodOxygen: vitals.bloodOxygen as Number,				temperature: vitals.temperature as Number,				respiratoryRate: vitals.respiratoryRate as Number				}		}var vitalSigns = summaries map (summary) -> 	{		id: summary.vitalSignsId as Number, 		source: summary.source,		recorded: summary.recordedAt,		(device: {			id: summary.deviceId as Number		}) if summary.source == "device",		vitals: transformVitals(summary)		}
 
 ---
 {

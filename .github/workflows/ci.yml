@@ -60,7 +60,6 @@ jobs:
         env: 
           CONNECTED_APP_CLIENT_ID: ${{ vars.CONNECTED_APP_CLIENT_ID}}
           CONNECTED_APP_CLIENT_SECRET: ${{ secrets.CONNECTED_APP_CLIENT_SECRET }}
-          EHR_PASSWORD: ${{ secrets.EHR_PASSWORD }} 
-
+          
     
     
