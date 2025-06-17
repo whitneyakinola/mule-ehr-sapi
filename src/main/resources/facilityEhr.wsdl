@@ -1,0 +1,466 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ehr.secondssave.com/soap" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="FacilityEhrService" targetNamespace="http://ehr.secondssave.com/soap">
+  <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ehr.secondssave.com/soap" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://ehr.secondssave.com/soap">
+            
+            <!-- Common Types -->
+            
+  <xsd:complexType name="VitalSigns">
+                
+    <xsd:sequence>
+                    
+      <xsd:element minOccurs="0" name="heartRate" type="xsd:int"/>
+                    
+      <xsd:element minOccurs="0" name="bloodPressureSystolic" type="xsd:int"/>
+                    
+      <xsd:element minOccurs="0" name="bloodPressureDiastolic" type="xsd:int"/>
+                    
+      <xsd:element minOccurs="0" name="bloodOxygen" type="xsd:double"/>
+                    
+      <xsd:element minOccurs="0" name="temperature" type="xsd:double"/>
+                    
+      <xsd:element minOccurs="0" name="respiratoryRate" type="xsd:int"/>
+                
+    </xsd:sequence>
+            
+  </xsd:complexType>
+            
+            
+  <xsd:complexType name="PatientData">
+                
+    <xsd:sequence>
+                    
+      <xsd:element name="firstName" type="xsd:string"/>
+                    
+      <xsd:element name="lastName" type="xsd:string"/>
+                    
+      <xsd:element name="dateOfBirth" type="xsd:date"/>
+                    
+      <xsd:element name="gender" type="xsd:string"/>
+                    
+      <xsd:element minOccurs="0" name="bloodType" type="xsd:string"/>
+                    
+      <xsd:element minOccurs="0" name="email" type="xsd:string"/>
+                    
+      <xsd:element minOccurs="0" name="medicalHistory" type="xsd:string"/>
+                    
+      <xsd:element minOccurs="0" name="allergies" type="xsd:string"/>
+                    
+      <xsd:element minOccurs="0" name="medications" type="xsd:string"/>
+                
+    </xsd:sequence>
+            
+  </xsd:complexType>
+            
+            
+  <xsd:complexType name="VitalSignsSummary">
+                
+    <xsd:sequence>
+                    
+      <xsd:element name="vitalSignsId" type="xsd:long"/>
+                    
+      <xsd:element name="recordedAt" type="xsd:dateTime"/>
+                    
+      <xsd:element name="vitalSigns" type="tns:VitalSigns"/>
+                    
+      <xsd:element name="source" type="xsd:string"/>
+                    
+      <xsd:element minOccurs="0" name="deviceId" type="xsd:int"/>
+                
+    </xsd:sequence>
+            
+  </xsd:complexType>
+            
+            <!-- Encounter Type Enumeration -->
+            
+  <xsd:simpleType name="EncounterType">
+                
+    <xsd:restriction base="xsd:string">
+                    
+      <xsd:enumeration value="emergency"/>
+                    
+      <xsd:enumeration value="urgent"/>
+                    
+      <xsd:enumeration value="routine"/>
+                    
+      <xsd:enumeration value="followup"/>
+                
+    </xsd:restriction>
+            
+  </xsd:simpleType>
+            
+            <!-- Triage Priority Enumeration -->
+            
+  <xsd:simpleType name="TriagePriorityType">
+                
+    <xsd:restriction base="xsd:string">
+                    
+      <xsd:enumeration value="P1_CRITICAL"/>
+                    
+      <xsd:enumeration value="P2_HIGH"/>
+                    
+      <xsd:enumeration value="P3_MEDIUM"/>
+                    
+      <xsd:enumeration value="P4_LOW"/>
+                    
+      <xsd:enumeration value="P5_NON_URGENT"/>
+                
+    </xsd:restriction>
+            
+  </xsd:simpleType>
+            
+            <!-- Transport Mode Enumeration -->
+            
+  <xsd:simpleType name="TransportMode">
+                
+    <xsd:restriction base="xsd:string">
+                    
+      <xsd:enumeration value="ambulance"/>
+                    
+      <xsd:enumeration value="walk-in"/>
+                    
+      <xsd:enumeration value="private-vehicle"/>
+                    
+      <xsd:enumeration value="helicopter"/>
+                    
+      <xsd:enumeration value="other"/>
+                
+    </xsd:restriction>
+            
+  </xsd:simpleType>
+            
+            <!-- CreateEncounter Types -->
+            
+  <xsd:element name="createEncounterRequest">
+                
+    <xsd:complexType>
+                    
+      <xsd:sequence>
+                        
+        <xsd:element name="emergencyResponseId" type="xsd:int"/>
+                        
+        <xsd:element name="patientData" type="tns:PatientData"/>
+                        
+        <xsd:element name="vitalSigns" type="tns:VitalSigns"/>
+                        
+        <xsd:element name="encounterType" type="tns:EncounterType"/>
+                        
+        <xsd:element name="chiefComplaint" type="xsd:string"/>
+                        
+        <xsd:element minOccurs="0" name="estimatedArrival" type="xsd:dateTime"/>
+                        
+        <xsd:element minOccurs="0" name="triagePriority" type="tns:TriagePriorityType"/>
+                        
+        <xsd:element minOccurs="0" name="vehicleIdentifier" type="xsd:string"/>
+                        
+        <xsd:element minOccurs="0" name="transportMode" type="tns:TransportMode"/>
+                        
+        <xsd:element minOccurs="0" name="paramedicNotes" type="xsd:string"/>
+                    
+      </xsd:sequence>
+                
+    </xsd:complexType>
+            
+  </xsd:element>
+            
+            
+  <xsd:element name="createEncounterResponse">
+                
+    <xsd:complexType>
+                    
+      <xsd:sequence>
+                        
+        <xsd:element name="encounterId" type="xsd:long"/>
+                        
+        <xsd:element name="patientId" type="xsd:long"/>
+                        
+        <xsd:element name="status" type="xsd:string"/>
+                        
+        <xsd:element maxOccurs="unbounded" minOccurs="0" name="recommendedActions" type="xsd:string"/>
+                    
+      </xsd:sequence>
+                
+    </xsd:complexType>
+            
+  </xsd:element>
+            
+            <!-- UpdatePatientVitals Types -->
+            
+  <xsd:element name="updatePatientVitalsRequest">
+                
+    <xsd:complexType>
+                    
+      <xsd:sequence>
+                        
+        <xsd:element name="encounterId" type="xsd:long"/>
+                        
+        <xsd:element name="vitalSigns" type="tns:VitalSigns"/>
+                        
+        <xsd:element minOccurs="0" name="deviceId" type="xsd:int"/>
+                        
+        <xsd:element name="recordedAt" type="xsd:dateTime"/>
+                    
+      </xsd:sequence>
+                
+    </xsd:complexType>
+            
+  </xsd:element>
+            
+            
+  <xsd:element name="updatePatientVitalsResponse">
+                
+    <xsd:complexType>
+                    
+      <xsd:sequence>
+                        
+        <xsd:element name="success" type="xsd:boolean"/>
+                        
+        <xsd:element name="vitalSignsId" type="xsd:long"/>
+                        
+        <xsd:element name="encounterStatus" type="xsd:string"/>
+                        
+        <xsd:element maxOccurs="unbounded" minOccurs="0" name="vitalSignsSummary" type="tns:VitalSignsSummary"/>
+                    
+      </xsd:sequence>
+                
+    </xsd:complexType>
+            
+  </xsd:element>
+            
+            <!-- CancelEncounter Types -->
+            
+  <xsd:element name="cancelEncounterRequest">
+                
+    <xsd:complexType>
+                    
+      <xsd:sequence>
+                        
+        <xsd:element name="encounterId" type="xsd:long"/>
+                        
+        <xsd:element name="cancellationReason" type="xsd:string"/>
+                        
+        <xsd:element minOccurs="0" name="redirectFacility" type="xsd:string"/>
+                        
+        <xsd:element minOccurs="0" name="notes" type="xsd:string"/>
+                    
+      </xsd:sequence>
+                
+    </xsd:complexType>
+            
+  </xsd:element>
+            
+            
+  <xsd:element name="cancelEncounterResponse">
+                
+    <xsd:complexType>
+                    
+      <xsd:sequence>
+                        
+        <xsd:element name="success" type="xsd:boolean"/>
+                        
+        <xsd:element name="encounterId" type="xsd:long"/>
+                        
+        <xsd:element name="cancellationTimestamp" type="xsd:dateTime"/>
+                        
+        <xsd:element name="finalStatus" type="xsd:string"/>
+                    
+      </xsd:sequence>
+                
+    </xsd:complexType>
+            
+  </xsd:element>
+            
+            <!-- UpdateEncounterStatus Types -->
+            
+  <xsd:element name="updateEncounterStatusRequest">
+                
+    <xsd:complexType>
+                    
+      <xsd:sequence>
+                        
+        <xsd:element name="encounterId" type="xsd:long"/>
+                        
+        <xsd:element minOccurs="0" name="triagePriority" type="tns:TriagePriorityType"/>
+                        
+        <xsd:element minOccurs="0" name="estimatedArrival" type="xsd:dateTime"/>
+                        
+        <xsd:element minOccurs="0" name="chiefComplaint" type="xsd:string"/>
+                        
+        <xsd:element minOccurs="0" name="notes" type="xsd:string"/>
+                    
+      </xsd:sequence>
+                
+    </xsd:complexType>
+            
+  </xsd:element>
+            
+            
+  <xsd:element name="updateEncounterStatusResponse">
+                
+    <xsd:complexType>
+                    
+      <xsd:sequence>
+                        
+        <xsd:element name="success" type="xsd:boolean"/>
+                        
+        <xsd:element name="encounterId" type="xsd:long"/>
+                        
+        <xsd:element maxOccurs="unbounded" minOccurs="0" name="updatedFields" type="xsd:string"/>
+                        
+        <xsd:element name="encounterStatus" type="xsd:string"/>
+                    
+      </xsd:sequence>
+                
+    </xsd:complexType>
+            
+  </xsd:element>
+            
+            <!-- Fault Types -->
+            
+  <xsd:element name="EhrServiceFault">
+                
+    <xsd:complexType>
+                    
+      <xsd:sequence>
+                        
+        <xsd:element name="faultCode" type="xsd:string"/>
+                        
+        <xsd:element name="faultMessage" type="xsd:string"/>
+                        
+        <xsd:element minOccurs="0" name="detail" type="xsd:string"/>
+                    
+      </xsd:sequence>
+                
+    </xsd:complexType>
+            
+  </xsd:element>
+            
+        
+</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="createEncounterRequest">
+    <wsdl:part element="tns:createEncounterRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateEncounterStatusRequest">
+    <wsdl:part element="tns:updateEncounterStatusRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createEncounterResponse">
+    <wsdl:part element="tns:createEncounterResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelEncounterRequest">
+    <wsdl:part element="tns:cancelEncounterRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updatePatientVitalsResponse">
+    <wsdl:part element="tns:updatePatientVitalsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="cancelEncounterResponse">
+    <wsdl:part element="tns:cancelEncounterResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updateEncounterStatusResponse">
+    <wsdl:part element="tns:updateEncounterStatusResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="EhrServiceFault">
+    <wsdl:part element="tns:EhrServiceFault" name="fault">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="updatePatientVitalsRequest">
+    <wsdl:part element="tns:updatePatientVitalsRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="FacilityEhrServicePort">
+    <wsdl:operation name="createEncounter">
+      <wsdl:input message="tns:createEncounterRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:createEncounterResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:EhrServiceFault" name="EhrServiceFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updatePatientVitals">
+      <wsdl:input message="tns:updatePatientVitalsRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:updatePatientVitalsResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:EhrServiceFault" name="EhrServiceFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelEncounter">
+      <wsdl:input message="tns:cancelEncounterRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:cancelEncounterResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:EhrServiceFault" name="EhrServiceFault">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateEncounterStatus">
+      <wsdl:input message="tns:updateEncounterStatusRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:updateEncounterStatusResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:EhrServiceFault" name="EhrServiceFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FacilityEhrServiceSoapBinding" type="tns:FacilityEhrServicePort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="createEncounter">
+      <soap:operation soapAction="http://ehr.secondssave.com/soap/createEncounter"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="EhrServiceFault">
+        <soap:fault name="EhrServiceFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updatePatientVitals">
+      <soap:operation soapAction="http://ehr.secondssave.com/soap/updatePatientVitals"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="EhrServiceFault">
+        <soap:fault name="EhrServiceFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelEncounter">
+      <soap:operation soapAction="http://ehr.secondssave.com/soap/cancelEncounter"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="EhrServiceFault">
+        <soap:fault name="EhrServiceFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="updateEncounterStatus">
+      <soap:operation soapAction="http://ehr.secondssave.com/soap/updateEncounterStatus"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="EhrServiceFault">
+        <soap:fault name="EhrServiceFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FacilityEhrService">
+    <wsdl:port binding="tns:FacilityEhrServiceSoapBinding" name="FacilityEhrServicePort">
+      <soap:address location="https://steel-city-memorial.ehr.secondssave.com/soap/facilityEhr"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
-    <apikit:config name="ehr-system-api-config" api="resource::7e373f5e-741c-41be-813e-ede4644f9594:ehr-system-api:1.1.1:raml:zip:ehr-system-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="ehr-system-api-config" api="resource::7e373f5e-741c-41be-813e-ede4644f9594:ehr-system-api:1.2.0:raml:zip:ehr-system-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="ehr-system-api-main">
         <http:listener config-ref="httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -11,10 +11,10 @@
                 <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="ehr-system-api-config" />
+		<apikit:router config-ref="ehr-system-api-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
-                <ee:transform doc:name="Transform Message">
+				<ee:transform doc:name="Transform Message">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -53,7 +53,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
-                <ee:transform doc:name="Transform Message">
+				<ee:transform doc:name="Transform Message">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -79,7 +79,7 @@ output application/json
                 </ee:transform>
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
-                <ee:transform doc:name="Transform Message">
+				<ee:transform doc:name="Transform Message">
                     <ee:message>
                         <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -130,11 +130,12 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
-    <flow name="post:\encounters:application\json:ehr-system-api-config">
-        <flow-ref doc:name="createEncounter Flow" doc:id="2d93698c-178c-42ac-94a7-48ee4bb31437" name="create-encounterFlow" />
+    <flow name="post:\facilities\(facility-slug)\encounters:application\json:ehr-system-api-config" doc:id="f70e781c-ebe4-4db1-8ffa-ed70cc6cb9c4">
+        <set-variable value="#[attributes.uriParams.'facility-slug' default '']" doc:name="facility" doc:id="a8e00203-17f6-4752-aca9-08073726a92e" variableName="facility" />
+		<flow-ref doc:name="createEncounter Flow" doc:id="2d93698c-178c-42ac-94a7-48ee4bb31437" name="create-encounterFlow" />
     </flow>
-    <flow name="post:\encounters\(id)\vital-signs:application\json:ehr-system-api-config">
+    <flow name="post:\facilities\(facility-slug)\encounters\(id)\vital-signs:application\json:ehr-system-api-config">
         <set-variable value="#[attributes.uriParams.id]" doc:name="encounterId" doc:id="f8efa511-d09b-4e29-a7d1-b4d1ba1a45f2" variableName="encounterId" />
-        <flow-ref doc:name="update Vital Signs" doc:id="43edc252-a4b4-48b7-aeae-aa8bae05a0ed" name="vital-signsFlow" />
+		<flow-ref doc:name="update Vital Signs" doc:id="43edc252-a4b4-48b7-aeae-aa8bae05a0ed" name="vital-signsFlow" />
     </flow>
 </mule>

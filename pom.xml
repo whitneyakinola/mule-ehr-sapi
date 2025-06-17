@@ -49,7 +49,7 @@
 						</properties>
 						<secureProperties>
 							<anypoint.platform.client_secret>${anypoint.platform.client_secret}</anypoint.platform.client_secret>
-							<ehr.password>${ehr.password}</ehr.password>							
+							<ehr.password>${ehr.password}</ehr.password>
 						</secureProperties>
 					</cloudhub2Deployment>
 				</configuration>
@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>7e373f5e-741c-41be-813e-ede4644f9594</groupId>
 			<artifactId>ehr-system-api</artifactId>
-			<version>1.1.1</version>
+			<version>1.2.0</version>
 			<classifier>raml</classifier>
 			<type>zip</type>
 		</dependency>
